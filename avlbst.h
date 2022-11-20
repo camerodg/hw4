@@ -138,6 +138,10 @@ protected:
     virtual void nodeSwap( AVLNode<Key,Value>* n1, AVLNode<Key,Value>* n2);
 
     // Add helper functions here
+void rotateLeft(AVLNode<Key, Value> *grandParent, AVLNode<Key, Value> *parent, AVLNode<Key, Value> *grandChild);
+void rotateRight(AVLNode<Key, Value> *grandParent, AVLNode<Key, Value> *parent, AVLNode<Key, Value> *grandChild);
+
+
 
 
 };
@@ -159,9 +163,28 @@ void AVLTree<Key, Value>::insert (const std::pair<const Key, Value> &new_item)
 template<class Key, class Value>
 void AVLTree<Key, Value>:: remove(const Key& key)
 {
-    // TODO
+    //see if it already exist 
+    Node<Key,Value>* temp = internalFind(key);
+    if(temp)
+    {
+        //if so, check to see if it has children or not
+        //three cases: no children, one child or two children
+        if(temp->getLeft() && temp->getRight())
+        {
+            nodeSwap((AVLNode<Key,Value>*)this->predecessor(temp), (AVLNode<Key,Value>*)temp);
+        }
+        else if(temp->getLeft())
+        {
+            nodeSwap((AVLNode<Key,Value>*)temp->getLeft(), (AVLNode<Key,Value>*)temp);
+        }
+        else if(temp->getRight())
+        {
+            nodeSwap((AVLNode<Key,Value>*)temp->getRight(), (AVLNode<Key,Value>*)temp);
+        }
+        temp = nullptr;
+        delete(temp);
+    }
 }
-
 template<class Key, class Value>
 void AVLTree<Key, Value>::nodeSwap( AVLNode<Key,Value>* n1, AVLNode<Key,Value>* n2)
 {
@@ -170,6 +193,13 @@ void AVLTree<Key, Value>::nodeSwap( AVLNode<Key,Value>* n1, AVLNode<Key,Value>* 
     n1->setBalance(n2->getBalance());
     n2->setBalance(tempB);
 }
-
-
+template<class Key, class Value>
+void rotateLeft(AVLNode<Key, Value> *grandParent, AVLNode<Key, Value> *parent, AVLNode<Key, Value> *grandChild)
+{
+}
+//Same set up for rotateright, but just different rotations 
+template<class Key, class Value>
+void rotateRight(AVLNode<Key, Value> *grandParent, AVLNode<Key, Value> *parent, AVLNode<Key, Value> *grandChild)
+{
+}
 #endif
